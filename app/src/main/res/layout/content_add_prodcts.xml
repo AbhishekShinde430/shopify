@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EBEAEA"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/activity_add_prodcts">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#1C4A6F"
+        android:id="@+id/toolbar"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:titleTextAppearance="@style/Toolbar.TitleText">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/toolTitlenew"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="georgia"
+                android:gravity="center"
+                android:paddingRight="10dp"
+                android:text="@string/app_name"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/book"
+                android:layout_width="45dp"
+                android:padding="8dp"
+                android:onClick="showPopup"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_menu"
+                android:layout_height="45dp" />
+
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+
+
+    <LinearLayout
+        android:id="@+id/emptylay"
+        android:visibility="gone"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="#2B6492"
+        android:gravity="center"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="Your list is Empty ! \n Start Adding Products "
+            android:layout_marginBottom="25dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="35dp"
+            android:textSize="22dp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <pl.droidsonroids.gif.GifImageView
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/newempty"
+            />
+
+
+    </LinearLayout>
+
+
+    
+    
+    <LinearLayout
+        android:id="@+id/mainLay"
+        android:layout_below="@+id/toolbar"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+    <LinearLayout
+        android:id="@+id/serchlayer"
+        android:background="#1C4A6F"
+        android:visibility="visible"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/search"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:textColor="#FFFFFF"
+            android:fontFamily="sans-serif"
+            android:paddingLeft="15dp"
+            android:paddingRight="8dp"
+            android:ems="10"
+            android:hint="  Search"
+            android:textColorHint="#FFFFFF"
+            android:textSize="14sp"
+            android:gravity="left"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:drawableLeft="@drawable/ic_search"
+            android:layout_gravity="center"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/labellayot"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:padding="5dp"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:textColor="@color/message"
+                android:layout_weight="1.5"
+                android:layout_marginLeft="10dp"
+                android:text="Product Name"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="12sp"
+                android:layout_width="0dp"
+                android:padding="5dp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/message"
+                android:layout_weight="1"
+                android:text=" Qty"
+                android:gravity="end"
+                android:textStyle="bold"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="12sp"
+                android:layout_width="0dp"
+                android:fontFamily="sans-serif"
+                android:padding="5dp"
+                android:layout_weight="1.4"
+                android:text=" Price/Unit"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/message"
+                android:gravity="end"
+                android:textStyle="bold"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+
+        <ListView
+            android:id="@+id/list"
+            android:divider="@null"
+            android:layout_marginBottom="65dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        android:backgroundTint="@color/bg_backmain"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/totallay"
+            android:layout_width="match_parent"
+            android:visibility="visible"
+
+            android:orientation="vertical"
+
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:text="Checked List Total"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:padding="5dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/txtCartTotal"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Rs : 0.00 "
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:text="Product List Total"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:padding="5dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/txttotal"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Rs : 0.00 "
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/banner_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+    <ProgressBar
+        android:id="@+id/pb"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+
+
+
+
+</RelativeLayout>

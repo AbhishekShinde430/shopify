@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/loginName"
+        android:visible="false"
+        android:title="Welcome Guest"/>
+
+    <item android:id="@+id/addList"
+        android:visible="false"
+        android:title="Add List"/>
+
+    <item android:id="@+id/pdf"
+        android:visible="true"
+        android:title="Generate PDF List"/>
+
+    <item android:id="@+id/share"
+        android:title="Share Product List"/>
+
+    <item android:id="@+id/clear"
+        android:title="Delete Product List"/>
+
+
+    <item android:id="@+id/logout"
+        android:visible="false"
+        android:title="Logout"/>
+
+
+
+
+</menu>
+
+
+
+
+
+
+
+
+

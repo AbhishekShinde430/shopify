@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView txtTotal,txtCartTotal;
     EditText editsearch;
     ProgressBar pb;
-    String abc;
+
 
 
     Context ctx=this;

@@ -1,4 +1,4 @@
-package com.example.abhishek.shopify;
+package com.infinitesoftsolution.shoppinglist.shopify;
 
 /**
  * Created by Manish on 07/07/2016.
@@ -9,7 +9,6 @@ import android.app.Activity;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.abhishek.shopify.MainActivity.Arry;
+import static com.infinitesoftsolution.shoppinglist.shopify.MainActivity.Arry;
 
 public class CustAdaFinStat extends BaseAdapter
 {

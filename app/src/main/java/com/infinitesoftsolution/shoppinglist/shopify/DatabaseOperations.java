@@ -1,11 +1,10 @@
-package com.example.abhishek.shopify;
+package com.infinitesoftsolution.shoppinglist.shopify;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 

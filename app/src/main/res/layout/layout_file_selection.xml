@@ -100,7 +100,7 @@
                 android:background="@color/colorAccent"
                 android:layout_height="wrap_content"/>
 
-            <android.support.v4.widget.Space
+            <androidx.legacy.widget.Space
                 android:layout_width="25dp"
                 android:layout_height="wrap_content"/>
 

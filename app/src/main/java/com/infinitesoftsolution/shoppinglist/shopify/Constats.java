@@ -1,4 +1,4 @@
-package com.example.abhishek.shopify;
+package com.infinitesoftsolution.shoppinglist.shopify;
 
 import com.itextpdf.text.Font;
 
@@ -18,5 +18,6 @@ public class Constats {
     public static Font FONT_TABLE_HEADER = new Font(Font.FontFamily.TIMES_ROMAN, 12,Font.BOLD);
     public static Font FONT_HEADER_FOOTER = new Font(Font.FontFamily.UNDEFINED, 7, Font.ITALIC);
     public static String PATH_PRODUCT_REPORT="/Shopify/PDF/";
+    public static Integer Adcount=0;
 
 }

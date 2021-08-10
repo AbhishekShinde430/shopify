@@ -1,4 +1,4 @@
-package com.example.abhishek.shopify;
+package com.infinitesoftsolution.shoppinglist.shopify;
 
 import android.provider.BaseColumns;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.abhishek.shopify">
+    package="com.infinitesoftsolution.shoppinglist.shopify">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,17 +14,18 @@
         android:windowSoftInputMode="adjustPan|adjustResize"
         android:roundIcon="@mipmap/ic_logo_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".LoginActivity"
+            android:name="com.infinitesoftsolution.shoppinglist.shopify.LoginActivity"
             android:label="@string/title_activity_add_prodcts"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".AddActivity"
+        <activity android:name="com.infinitesoftsolution.shoppinglist.shopify.RegisterActivity" />
+        <activity android:name="com.infinitesoftsolution.shoppinglist.shopify.AddActivity"
 
             android:screenOrientation="portrait"/>
-        <activity android:name=".MainActivity"
+        <activity android:name="com.infinitesoftsolution.shoppinglist.shopify.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +35,7 @@
         </activity>
 
         <provider
-            android:name=".GenericFileProvider"
+            android:name="com.infinitesoftsolution.shoppinglist.shopify.GenericFileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">

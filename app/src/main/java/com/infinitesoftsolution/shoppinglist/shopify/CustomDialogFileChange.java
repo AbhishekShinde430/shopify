@@ -1,4 +1,4 @@
-package com.example.abhishek.shopify;
+package com.infinitesoftsolution.shoppinglist.shopify;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class CustomDialogFileChange extends Dialog
        {

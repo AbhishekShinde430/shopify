@@ -1,4 +1,4 @@
-package com.example.abhishek.shopify;
+package com.infinitesoftsolution.shoppinglist.shopify;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
@@ -17,14 +18,19 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.content.FileProvider;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+
+import com.example.moreapps.MoreAppsAlertClass;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,7 +43,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -45,9 +50,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdSize;
 import com.facebook.ads.AdView;
+import com.facebook.ads.AudienceNetworkAds;
 import com.facebook.ads.InterstitialAd;
+import com.facebook.ads.InterstitialAdListener;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallState;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.Task;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -73,7 +95,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,6 +127,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public AdView adView;
     public static InterstitialAd interstitialAd ;
     public static String TAG="STATUS";
+
+    //inappp
+    private AppUpdateManager mAppUpdateManager;
+    private static final int RC_APP_UPDATE = 11;
+    private ReviewManager reviewManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,9 +180,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             categories.add("jar");
             categories.add("can");
 
+
+            AudienceNetworkAds.initialize(this);
+
+
+            AdSettings.addTestDevice("2086d134-8ee3-483a-b657-7aa021dd7fa7");
+
             //banner ads
-            adView = new AdView(this, "IMG_16_9_APP_INSTALL# 299478034602375_299478524602326", AdSize.BANNER_HEIGHT_50);
-            //adView = new AdView(this, " 299478034602375_299478524602326", AdSize.BANNER_HEIGHT_50);
+            adView = new AdView(this, "299478034602375_299478524602326", AdSize.BANNER_HEIGHT_50);
+           // adView = new AdView(this, "IMG_16_9_APP_INSTALL#299478034602375_299478524602326", AdSize.BANNER_HEIGHT_50);
+
 
             // Find the Ad Container
             LinearLayout adContainer = (LinearLayout) findViewById(R.id.banner_container);
@@ -166,8 +199,84 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Request an ad
 
+            adView.setAdListener(new AdListener() {
+                @Override
+                public void onError(Ad ad, AdError adError) {
+                    // Ad error callback
+                    //Toast.makeText(MainActivity.this, "Error: " + adError.getErrorMessage(),
+                          //  Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onAdLoaded(Ad ad) {
+                    // Ad loaded callback
+                }
+
+                @Override
+                public void onAdClicked(Ad ad) {
+                    // Ad clicked callback
+                }
+
+                @Override
+                public void onLoggingImpression(Ad ad) {
+                    // Ad impression logged callback
+                }
+            });
+
 
             adView.loadAd();
+
+            interstitialAd = new InterstitialAd(this, "299478034602375_299479167935595");
+
+            interstitialAd.setAdListener(new InterstitialAdListener() {
+                @Override
+                public void onInterstitialDisplayed(Ad ad) {
+                    // Interstitial ad displayed callback
+                    Log.e(TAG, "Interstitial ad displayed.");
+                }
+
+                @Override
+                public void onInterstitialDismissed(Ad ad) {
+                    // Interstitial dismissed callback
+                    Log.e(TAG, "Interstitial ad dismissed.");
+                    interstitialAd.loadAd();
+                }
+
+                @Override
+                public void onError(Ad ad, AdError adError) {
+                    // Ad error callback
+                    Log.e(TAG, "Interstitial ad failed to load: " + adError.getErrorMessage());
+                }
+
+                @Override
+                public void onAdLoaded(Ad ad) {
+                    // Interstitial ad is loaded and ready to be displayed
+                    Log.d(TAG, "Interstitial ad is loaded and ready to be displayed!");
+                    // Show the ad
+                    //interstitialAd.show();
+                }
+
+                @Override
+                public void onAdClicked(Ad ad) {
+                    // Ad clicked callback
+                    Log.d(TAG, "Interstitial ad clicked!");
+                }
+
+                @Override
+                public void onLoggingImpression(Ad ad) {
+                    // Ad impression logged callback
+                    Log.d(TAG, "Interstitial ad impression logged!");
+                }
+            });
+
+            // For auto play video ads, it's recommended to load the ad
+            // at least 30 seconds before it is shown
+            interstitialAd.loadAd();
+
+
+            /*--------------------App Rater-------------*/
+            reviewManager = ReviewManagerFactory.create(this);
+
 
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -228,10 +337,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onClick(View view) {
 
+                    if(Constats.Adcount>4){
+                        if(interstitialAd.isAdLoaded()){
+                            Constats.Adcount=0;
+                            interstitialAd.show();
+
+                        }
+                    }else{
+                        Constats.Adcount++;
+                    }
+
                     fab.setEnabled(false);
                     Intent it = new Intent(MainActivity.this, AddActivity.class);
                     startActivity(it);
-
                     fab.setEnabled(true);
                 }
             });
@@ -241,6 +359,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             registerForContextMenu(listview);
 
             requestStoragePermission();
+
+            MoreAppsAlertClass alertClass=new MoreAppsAlertClass(MainActivity.this,MainActivity.this);
+            alertClass.FetchData("https://infiniteapps.000webhostapp.com/MoreApps.json");
 
 
         }catch (Exception e){
@@ -253,6 +374,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+    }
+
+    public void showRateApp() {
+        Task<ReviewInfo> request = reviewManager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // We can get the ReviewInfo object
+                ReviewInfo reviewInfo = task.getResult();
+
+                Task<Void> flow = reviewManager.launchReviewFlow(this, reviewInfo);
+                flow.addOnCompleteListener(task1 -> {
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                });
+            } else {
+                // There was some problem, continue regardless of the result.
+                // show native rate app dialog on error
+                //showRateAppFallbackDialog();
+                Toast.makeText(MainActivity.this,"Something went wrong",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -322,6 +465,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 txtTotal.setText(String.format("Rs : " + df.format(total)));
                 txtCartTotal.setText("Rs : "+df.format(totalCart));
+
+                if(Arry.size()%5==0){
+                    showRateApp();
+                }
             }
 
         }catch (Exception e){
@@ -837,7 +984,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private  void createTable(Paragraph reportBody)
             throws BadElementException {
 
-        float[] columnWidths = {5,5,5,2}; //total 4 columns and their width. The first three columns will take the same width and the fourth one will be 5/2.
+        float[] columnWidths = {5,5,5,5,5}; //total 4 columns and their width. The first three columns will take the same width and the fourth one will be 5/2.
         PdfPTable table = new PdfPTable(columnWidths);
 
         table.setWidthPercentage(100); //set table with 100% (full page)
@@ -866,7 +1013,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cell.setFixedHeight(30);
         table.addCell(cell);
 
-        cell = new PdfPCell(new Phrase("Price",
+        cell = new PdfPCell(new Phrase("Price/Unit",
+                Constats.FONT_TABLE_HEADER));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(new GrayColor(0.75f));
+        cell.setFixedHeight(30);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(" Total Price",
                 Constats.FONT_TABLE_HEADER));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(new GrayColor(0.75f));
@@ -900,6 +1054,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             cell.setFixedHeight(28);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
+
+            Double val=Double.parseDouble(Arry.get(i).get_Qty())*Double.parseDouble(Arry.get(i).get_val());
+
+            cell = new PdfPCell(new Phrase(String.valueOf(val)));
+            cell.setFixedHeight(28);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
         }
 
         cell = new PdfPCell(new Phrase("Total",
@@ -909,6 +1070,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cell.setFixedHeight(30);
         table.addCell(cell);
 
+        //quntity total
+        Double total1=0.00;
+        for (int i=0;i<Arry.size();i++){
+
+            Double qty=Double.valueOf(Arry.get(i).get_Qty());
+
+            total1=total1+qty;
+        }
+
+        cell = new PdfPCell(new Phrase(total1.toString(),
+                Constats.FONT_TABLE_HEADER));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(new GrayColor(0.75f));
+        cell.setFixedHeight(30);
+        table.addCell(cell);
+
+      //unit
         cell = new PdfPCell(new Phrase("",
                 Constats.FONT_TABLE_HEADER));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -916,15 +1094,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cell.setFixedHeight(30);
         table.addCell(cell);
 
+        //price per unit
+
         cell = new PdfPCell(new Phrase("",
                 Constats.FONT_TABLE_HEADER));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(new GrayColor(0.75f));
         cell.setFixedHeight(30);
         table.addCell(cell);
+
+        //total price
 
         Double total=0.00;
-
         for (int i=0;i<Arry.size();i++){
             Double val=Double.valueOf(Arry.get(i).get_val());
             Double qty=Double.valueOf(Arry.get(i).get_Qty());
@@ -1057,7 +1238,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            Toast.makeText(getApplicationContext(), "All permissions are granted!", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getApplicationContext(), "All permissions are granted!", Toast.LENGTH_SHORT).show();
                         }
 
                         // check for permanent denial of any permission
@@ -1114,6 +1295,147 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStart() {
         super.onStart();
         GetProdctList();
+
+        mAppUpdateManager = AppUpdateManagerFactory.create(this);
+
+        mAppUpdateManager.registerListener(installStateUpdatedListener);
+
+        mAppUpdateManager.getAppUpdateInfo().addOnSuccessListener(appUpdateInfo -> {
+
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE /*AppUpdateType.IMMEDIATE*/)){
+
+                try {
+                    mAppUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo, AppUpdateType.FLEXIBLE /*AppUpdateType.IMMEDIATE*/, MainActivity.this, RC_APP_UPDATE);
+
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED){
+                //CHECK THIS if AppUpdateType.FLEXIBLE, otherwise you can skip
+                popupSnackbarForCompleteUpdate();
+            } else {
+                Log.e(TAG, "checkForAppUpdateAvailability: something else");
+            }
+        });
+    }
+
+    InstallStateUpdatedListener installStateUpdatedListener = new
+            InstallStateUpdatedListener() {
+                @Override
+                public void onStateUpdate(InstallState state) {
+                    if (state.installStatus() == InstallStatus.DOWNLOADED){
+                        //CHECK THIS if AppUpdateType.FLEXIBLE, otherwise you can skip
+                        popupSnackbarForCompleteUpdate();
+                    } else if (state.installStatus() == InstallStatus.INSTALLED){
+                        if (mAppUpdateManager != null){
+                            mAppUpdateManager.unregisterListener(installStateUpdatedListener);
+                        }
+
+                    } else {
+                        Log.i(TAG, "InstallStateUpdatedListener: state: " + state.installStatus());
+                    }
+                }
+            };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_APP_UPDATE) {
+            if (resultCode != RESULT_OK) {
+                Log.e(TAG, "onActivityResult: app download failed");
+            }
+        }
+    }
+
+    private void popupSnackbarForCompleteUpdate() {
+
+        Snackbar snackbar =
+                Snackbar.make(
+                        findViewById(R.id.coordinatorLayout_main),
+                        "New app is ready!",
+                        Snackbar.LENGTH_INDEFINITE);
+
+        snackbar.setAction("Install", view -> {
+            if (mAppUpdateManager != null){
+                mAppUpdateManager.completeUpdate();
+            }
+        });
+
+
+
+
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        snackbar.show();
+    }
+
+    private void showAlert() {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Do you want to close the Application");
+        alertDialogBuilder.setPositiveButton("NO",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        //System.exit(0);
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("YES",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+                ActivityCompat.finishAffinity(MainActivity.this);
+                System.exit(0);
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAppUpdateManager != null) {
+            mAppUpdateManager.unregisterListener(installStateUpdatedListener);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+
+        if (interstitialAd != null) {
+            interstitialAd.destroy();
+        }
+        super.onDestroy();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+
+
+            if(interstitialAd.isAdLoaded()){
+                interstitialAd.show();
+                showAlert();
+            }
+            else {
+                showAlert();
+            }
+
+        }
     }
 
 }

@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     EditText editsearch;
     ProgressBar pb;
     String abc="abab";
+    String pqr ="abajajx"
 
 
 
